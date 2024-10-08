@@ -67,7 +67,7 @@ const generatePromotionMessage = (user) => {
 // Enviar mensajes automáticos de recordatorio de pago
 const schedulePaymentReminders = async (provider) => {
     const usersWithDebts = getUsersFromExcel('./uploads/adeudo.xlsx', 6); // Obtener usuarios deudores desde el archivo Excel
-    cron.schedule('59 13 * * *', () => {  // Programado para las 5:30 PM todos los días
+    cron.schedule('50 14 * * *', () => {  // Programado para las 5:30 PM todos los días
         usersWithDebts.forEach(user => {
             const message = generateReminderMessage(user);
             sendMessage(provider, user.telefono, message);
@@ -81,7 +81,7 @@ const schedulePromotions = async (provider) => {
     const usersWithoutDebts = getUsersFromExcel('./uploads/sindeuda.xlsx', 0); // Obtener usuarios sin deudas desde otro archivo Excel
     const mediaUrl = './imagen.jpg'; // URL de la imagen a enviar
 
-    cron.schedule('57 13 * * *', () => {  // Programado para las 10:00 AM todos los días
+    cron.schedule('10 15 * * *', () => {  // Programado para las 10:00 AM todos los días
         usersWithoutDebts.forEach(user => {
             const saldo = user.Saldo || 0; // Manejar el caso donde no haya saldo
             if (saldo === 0) { // Si no deben nada
