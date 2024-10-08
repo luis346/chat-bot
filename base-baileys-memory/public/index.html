@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Archivos Excel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Gestión de Archivos Excel</h1>
+
+        <!-- Formulario para actualizar el archivo de Adeudos -->
+        <form id="uploadAdeudoForm" action="http://localhost:4000/update-adeudo" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="fileAdeudo">Subir archivo de Adeudos</label>
+                <input type="file" class="form-control-file" id="fileAdeudo" name="file" accept=".xlsx" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Actualizar Adeudos</button>
+        </form>
+
+        <hr>
+
+        <!-- Formulario para actualizar el archivo sin deudas -->
+        <form id="uploadSindeudaForm" action="http://localhost:4000/update-sindeuda" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="fileSindeuda">Subir archivo sin deudas</label>
+                <input type="file" class="form-control-file" id="fileSindeuda" name="file" accept=".xlsx" required>
+            </div>
+            <button type="submit" class="btn btn-success">Actualizar Sin Deuda</button>
+        </form>
+
+        <hr>
+
+        <!-- Mensaje para indicar el estado del proceso -->
+        <div id="message" class="alert d-none mt-4" role="alert"></div>
+    </div>
+
+    <script>
+        const uploadAdeudoForm = document.getElementById('uploadAdeudoForm');
+        const uploadSindeudaForm = document.getElementById('uploadSindeudaForm');
+        const message = document.getElementById('message');
+    
+        uploadAdeudoForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(uploadAdeudoForm);
+            message.classList.remove('d-none');
+            message.classList.add('alert-info');
+            message.innerText = 'Actualizando archivo de adeudos...';
+    
+            fetch('/uploadAdeudo', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                message.classList.remove('alert-info');
+                message.classList.add('alert-success');
+                message.innerText = 'Archivo de adeudos subido con éxito.';
+            })
+            .catch(error => {
+                message.classList.remove('alert-info');
+                message.classList.add('alert-danger');
+                message.innerText = 'Error al subir el archivo de adeudos.';
+            });
+        });
+    
+        uploadSindeudaForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(uploadSindeudaForm);
+            message.classList.remove('d-none');
+            message.classList.add('alert-info');
+            message.innerText = 'Actualizando archivo de sin deudas...';
+    
+            fetch('/uploadSindeuda', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                message.classList.remove('alert-info');
+                message.classList.add('alert-success');
+                message.innerText = 'Archivo de sin deudas subido con éxito.';
+            })
+            .catch(error => {
+                message.classList.remove('alert-info');
+                message.classList.add('alert-danger');
+                message.innerText = 'Error al subir el archivo de sin deudas.';
+            });
+        });
+    </script>
